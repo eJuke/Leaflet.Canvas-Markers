@@ -3,7 +3,7 @@ Leaflet plugin for displaying markers on canvas instead of DOM
 
 ## Demo
 
-There's a [demo](eJuke.github.io/Leaflet.Canvas-Markers/examples/index.html) for 10000 points, running on Canvas
+There's a [demo](http://eJuke.github.io/Leaflet.Canvas-Markers/examples/index.html) for 10000 points, running on Canvas
 
 ## Installation and basic usage
 
@@ -58,10 +58,11 @@ Plugin was tested in Google Chrome v59. There is results for 100000 markers:
 </table>
 
 As you can see DOM operations are slow, so you should use canvas for a large number of markers.
-You can also use L.circleMarker for your points
+
+You can also use L.circleMarker for your points with similar performance, but then you're limited to icon design.
 
 ## Methods 
 
 - **addMarker(marker)**: Adds a marker to the layer
-- **removeMarker(marker, redraw)**: Removes a marker from the layer. Set redraw to `true` if you want to redraw layer after marker remove
+- **removeMarker(marker, redraw)**: Removes a marker from the layer. Set **redraw** to `true` if you want to redraw layer after marker remove
 - **redraw()**: Redraws the layer
