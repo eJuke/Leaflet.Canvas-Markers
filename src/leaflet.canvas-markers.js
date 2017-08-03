@@ -64,23 +64,29 @@ L.CanvasIconLayer = (L.Layer ? L.Layer : L.Class).extend({
   },
 
   _drawMarker: function (marker) {
-    var context = this._context;
+    var self = this;
 
-    var latlng = this._map.latLngToContainerPoint(marker.getLatLng());
+    var pointPos = this._map.latLngToContainerPoint(marker.getLatLng());
 
     if (!marker.canvas_img){
       marker.canvas_img = new Image();
       marker.canvas_img.src = marker.options.icon.options.iconUrl;
       marker.canvas_img.onload = function() {
-        context.drawImage(
-          marker.canvas_img, 
-          latlng.x - marker.options.icon.options.iconAnchor[0], 
-          latlng.y - marker.options.icon.options.iconAnchor[1]
-        );
+        self._drawImage(marker, pointPos);
       }
     } else {
-      context.drawImage(marker.canvas_img, latlng.x, latlng.y);
+      self._drawImage(marker, pointPos);
     }
+  },
+
+  _drawImage: function (marker, pointPos) {
+    this._context.drawImage(
+        marker.canvas_img,
+        pointPos.x - marker.options.icon.options.iconAnchor[0],
+        pointPos.y - marker.options.icon.options.iconAnchor[1],
+        marker.options.icon.options.iconSize[0],
+        marker.options.icon.options.iconSize[1]
+      );
   },
 
   _reset: function () {
