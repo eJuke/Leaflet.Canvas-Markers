@@ -66,8 +66,7 @@ L.CanvasIconLayer = (L.Layer ? L.Layer : L.Class).extend({
   _drawMarker: function (marker) {
     var context = this._context;
 
-    var x = this._canvas.width * ((marker._latlng.lng - this._bounds.W) / this._bounds.xDiff),
-        y = this._canvas.height * ((this._bounds.N - marker._latlng.lat) / this._bounds.yDiff);
+    var latlng = this._map.latLngToContainerPoint(marker.getLatLng());
 
     if (!marker.canvas_img){
       marker.canvas_img = new Image();
@@ -75,12 +74,12 @@ L.CanvasIconLayer = (L.Layer ? L.Layer : L.Class).extend({
       marker.canvas_img.onload = function() {
         context.drawImage(
           marker.canvas_img, 
-          x - marker.options.icon.options.iconAnchor[0], 
-          y - marker.options.icon.options.iconAnchor[1]
+          latlng.x - marker.options.icon.options.iconAnchor[0], 
+          latlng.y - marker.options.icon.options.iconAnchor[1]
         );
       }
     } else {
-      context.drawImage(marker.canvas_img, x, y);
+      context.drawImage(marker.canvas_img, latlng.x, latlng.y);
     }
   },
 
@@ -105,23 +104,9 @@ L.CanvasIconLayer = (L.Layer ? L.Layer : L.Class).extend({
       this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     }
 
-    this._saveBounds();
-
     Object.keys(this._markers).forEach(function(item){
       this._drawMarker(this._markers[item]);
     }, this)
-  },
-
-  _saveBounds: function () {
-    var b = this._map.getBounds();
-    this._bounds = {
-      xDiff: b.getEast() - b.getWest(),
-      yDiff: b.getNorth() - b.getSouth(),
-      N: b.getNorth(),
-      S: b.getSouth(),
-      W: b.getWest(),
-      E: b.getEast()
-    }
   },
 
   _initCanvas: function () {
@@ -133,7 +118,6 @@ L.CanvasIconLayer = (L.Layer ? L.Layer : L.Class).extend({
     this._canvas.width  = size.x;
     this._canvas.height = size.y;
 
-    this._saveBounds();
     this._context = this._canvas.getContext('2d');
 
     var animated = this._map.options.zoomAnimation && L.Browser.any3d;

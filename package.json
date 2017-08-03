@@ -1,13 +1,13 @@
 {
   "name": "leaflet-canvas-marker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Leaflet plugin to display icons on canvas instead of DOM",
   "main": "dist/leaflet.canvas-icons.js",
   "directories": {
     "example": "examples"
   },
   "scripts": {
-    "build": "uglifyjs src/leaflet.canvas-icons.js -c -m  -o dist/leaflet.canvas-icons.js"
+    "build": "uglifyjs src/leaflet.canvas-markers.js -c -m  -o dist/leaflet.canvas-markers.js"
   },
   "keywords": [
     "leaflet",
