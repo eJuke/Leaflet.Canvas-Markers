@@ -1,5 +1,5 @@
 # Leaflet.Canvas-Markers
-Leaflet plugin for displaying markers on canvas instead of DOM. Working on Leaflet 1.0.0 and above.
+Leaflet plugin for displaying markers on canvas instead of DOM. Working with Leaflet 1.0.0 and above.
 
 ## Demo
 

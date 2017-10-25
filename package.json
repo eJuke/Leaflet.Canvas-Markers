@@ -1,21 +1,30 @@
 {
   "name": "leaflet-canvas-marker",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Leaflet plugin to display icons on canvas instead of DOM",
   "main": "dist/leaflet.canvas-icons.js",
   "directories": {
-    "example": "examples"
+    "example": "examples",
+    "lib": "dist"
   },
   "scripts": {
-    "build": "uglifyjs src/leaflet.canvas-markers.js -c -m  -o dist/leaflet.canvas-markers.js"
+    "build": "uglifyjs src/leaflet.canvas-markers.js -c -m  -o dist/leaflet.canvas-markers.js",
+    "prepublish": "npm run build"
   },
   "keywords": [
     "leaflet",
     "leaflet-plugin"
   ],
-  "author": "Evgeniy Voynov",
+  "author": "Evgeniy Voynov <voynov.ev@gmail.com> (http://github.com/eJuke)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eJuke/Leaflet.Canvas-Markers.git"
+  },
   "devDependencies": {
     "uglify-js": "^3.0.27"
+  },
+  "peerDependencies": {
+    "leaflet": "^1.0.0"
   }
 }
