@@ -1,5 +1,5 @@
 # Leaflet.Canvas-Markers
-Leaflet plugin for displaying markers on canvas instead of DOM
+Leaflet plugin for displaying markers on canvas instead of DOM. Working on Leaflet 1.0.0 and above.
 
 ## Demo
 
@@ -61,8 +61,10 @@ As you can see DOM operations are slow, so you should use canvas for a large num
 
 You can also use L.circleMarker for your points with similar performance, but then you're limited to icon design.
 
-## Methods 
+## Methods
 
-- **addMarker(marker)**: Adds a marker to the layer
+- **addMarker(marker)**: Adds a marker to the layer.
 - **removeMarker(marker, redraw)**: Removes a marker from the layer. Set **redraw** to `true` if you want to redraw layer after marker remove
 - **redraw()**: Redraws the layer
+
+I also implemented binds for default **addLayer** and **removeLayer** (equal to removeMarker(marker, _true_) methods.

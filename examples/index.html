@@ -28,7 +28,7 @@
   <div class="container">
     <div class="header">
       <h1>Leaflet.canvas-icons</h1>
-      <p>Плагин для отображения маркеров и иконок на canvas-элементе, вместо стандартных DOM-узлов</p>
+      <p>Leaflet plugin for displaying markers on canvas instead of DOM.</p>
     </div>
     <div class="map" id="map"></div>
   </div>
@@ -47,12 +47,12 @@
       iconSize: [20, 18],
       iconAnchor: [10, 9]
     });
-    
+
     var markers = [];
     for (var i = 0; i < 10000; i++) {
       var marker = L.marker([58.5578 + Math.random()*1.8, 29.0087 + Math.random()*3.6], {icon: icon});
       markers.push(marker);
-      ciLayer.addMarker(markers[markers.length-1]);
+      ciLayer.addLayer(markers[markers.length-1]);
     }
   </script>
 </body>

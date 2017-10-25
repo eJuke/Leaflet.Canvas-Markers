@@ -27,6 +27,15 @@ L.CanvasIconLayer = (L.Layer ? L.Layer : L.Class).extend({
     this._drawMarker(marker);
   },
 
+  addLayer: function (layer) {
+    if ((layer.options.pane == 'markerPane') && layer.options.icon) this.addMarker(layer);
+    else console.error('Layer isn\'t a marker');
+  },
+
+  removeLayer: function (layer) {
+    this.removeMarker(layer, true);
+  },
+
   removeMarker: function (marker, redraw) {
     delete this._markers[marker._leaflet_id];
     if (redraw) {
