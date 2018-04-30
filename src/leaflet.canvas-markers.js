@@ -60,6 +60,7 @@
 
     onAdd: function (map) {
       this._map = map;
+      this._onClickListeners = [];
 
       if (!this._canvas) {
         this._initCanvas();
@@ -72,6 +73,7 @@
       }
 
       map.on('moveend', this._reset, this);
+      map.on('click', this._executeClickListeners, this);
     },
 
     onRemove: function (map) {
@@ -156,6 +158,30 @@
 
     _updateOptions: function () {
 
+    },
+
+    addOnClickListener: function (listener) {
+        this._onClickListeners.push(listener);
+    },
+
+    _executeClickListeners: function(event) {
+        for (let markerId in this._markers) {
+            let marker = this._markers[markerId];
+            let point = this._map.latLngToContainerPoint(this._markers[markerId].getLatLng());
+
+            if (this._hit(marker, point, event)) {
+                this._onClickListeners.forEach(listener => listener(event));
+                break;
+            }
+        }
+    },
+
+    _hit(marker, point, event) {
+        let halfWidth = marker.options.icon.options.iconSize[0] / 2;
+        let halfHeight = marker.options.icon.options.iconSize[1] / 2;
+        let x = event.containerPoint.x;
+        let y = event.containerPoint.y;
+        return x <= point.x + halfWidth && x >= point.x - halfWidth && y >= point.y - halfHeight && y <= point.y + halfHeight;
     }
   });
 

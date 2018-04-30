@@ -42,6 +42,8 @@
 
     var ciLayer = L.canvasIconLayer({}).addTo(map);
 
+    ciLayer.addOnClickListener((event) => console.log('clicked!'));
+
     var icon = L.icon({
       iconUrl: 'img/pothole.png',
       iconSize: [20, 18],
