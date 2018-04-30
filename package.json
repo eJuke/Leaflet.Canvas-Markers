@@ -1,6 +1,6 @@
 {
   "name": "leaflet-canvas-marker",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Leaflet plugin to display icons on canvas instead of DOM",
   "main": "dist/leaflet.canvas-icons.js",
   "directories": {
