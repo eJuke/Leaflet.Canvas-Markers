@@ -161,27 +161,27 @@
     },
 
     addOnClickListener: function (listener) {
-        this._onClickListeners.push(listener);
+      this._onClickListeners.push(listener);
     },
 
     _executeClickListeners: function(event) {
-        for (let markerId in this._markers) {
-            let marker = this._markers[markerId];
-            let point = this._map.latLngToContainerPoint(this._markers[markerId].getLatLng());
+      for (var markerId in this._markers) {
+        var marker = this._markers[markerId];
+        var point = this._map.latLngToContainerPoint(this._markers[markerId].getLatLng());
 
-            if (this._hit(marker, point, event)) {
-                this._onClickListeners.forEach(listener => listener(event));
-                break;
-            }
+        if (this._hit(marker, point, event)) {
+          this._onClickListeners.forEach(function(listener) { listener(event); });
+          break;
         }
+      }
     },
 
-    _hit(marker, point, event) {
-        let halfWidth = marker.options.icon.options.iconSize[0] / 2;
-        let halfHeight = marker.options.icon.options.iconSize[1] / 2;
-        let x = event.containerPoint.x;
-        let y = event.containerPoint.y;
-        return x <= point.x + halfWidth && x >= point.x - halfWidth && y >= point.y - halfHeight && y <= point.y + halfHeight;
+    _hit: function(marker, point, event) {
+      var halfWidth = marker.options.icon.options.iconSize[0] / 2;
+      var halfHeight = marker.options.icon.options.iconSize[1] / 2;
+      var x = event.containerPoint.x;
+      var y = event.containerPoint.y;
+      return x <= point.x + halfWidth && x >= point.x - halfWidth && y >= point.y - halfHeight && y <= point.y + halfHeight;
     }
   });
 
