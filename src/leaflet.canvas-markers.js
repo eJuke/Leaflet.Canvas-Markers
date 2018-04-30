@@ -171,6 +171,7 @@
 
             if (this._hit(marker, point, event)) {
                 this._onClickListeners.forEach(listener => listener(event));
+                break;
             }
         }
     },
