@@ -336,7 +336,7 @@
 		},
 
 		addOnHoverListener: function (listener) {
-			if(this._onHoverListeners.length===0)
+			if (this._onHoverListeners.length==0)
 				map.on('mousemove', this._executeListeners, this);
 			this._onHoverListeners.push(listener);
 		},
@@ -354,10 +354,15 @@
 			var ret = this._markers.search({ minX: x, minY: y, maxX: x, maxY: y });
 
 			if (ret && ret.length > 0) {
+				me._map._container.style.cursor="pointer";
 				if (event.type==="click")
 					me._onClickListeners.forEach(function (listener) { listener(event, ret); });
 				if (event.type==="mousemove")
 					me._onHoverListeners.forEach(function (listener) { listener(event, ret); });
+			}
+			else
+			{
+				me._map._container.style.cursor="";
 			}
 		}
     });
