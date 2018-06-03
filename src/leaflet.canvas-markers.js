@@ -336,7 +336,7 @@
 		},
 
 		addOnHoverListener: function (listener) {
-			if (this._onHoverListeners.length==0)
+			if (this._onHoverListeners.length===0)
 				map.on('mousemove', this._executeListeners, this);
 			this._onHoverListeners.push(listener);
 		},
