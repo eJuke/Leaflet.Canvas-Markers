@@ -29,7 +29,7 @@ ciLayer.addMarker(marker);
 
 ## Benchmark
 
-Plugin was tested in Google Chrome v59. There is results for 100000 markers:
+Plugin was tested in Google Chrome v66 & IE11. There is results for 100000 markers:
 
 <table>
   <thead>
@@ -48,7 +48,7 @@ Plugin was tested in Google Chrome v59. There is results for 100000 markers:
     <tr>
       <td>First load time</td>
       <td>160-200 seconds</td>
-      <td><b>7 seconds</b></td>
+      <td><b><1 seconds</b></td>
     </tr>
     <tr>
       <td>Zoom and move time</td>
@@ -65,12 +65,15 @@ You can also use L.circleMarker for your points with similar performance, but th
 ## Methods
 
 - **addMarker(marker)**: Adds a marker to the layer.
+- **addMarkers(markers)**: Adds a markers to the layer.
 - **removeMarker(marker, redraw)**: Removes a marker from the layer. Set **redraw** to `true` if you want to redraw layer after marker remove
 - **redraw()**: Redraws the layer
 - **addOnClickListener(eventHandler)**: Adds common click listener for all markers
+- **addOnHoverListener(eventHandler)**: Adds a hover over listener for all markers
 
-I also implemented binds for default **addLayer** and **removeLayer** (equal to removeMarker(marker, _true_) methods.
+I also implemented binds for default **addLayer**, **addLayers** and **removeLayer** (equal to removeMarker(marker, _true_) methods.
 
 ## Contributors
 
 [crzo](https://github.com/crzo)
+[Spaction](https://github.com/Spaction)
