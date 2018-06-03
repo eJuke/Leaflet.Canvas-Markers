@@ -26,5 +26,8 @@
   },
   "peerDependencies": {
     "leaflet": "^1.0.0"
+  },
+  "dependencies":{
+    "rbush": "^2.0.2"
   }
 }
