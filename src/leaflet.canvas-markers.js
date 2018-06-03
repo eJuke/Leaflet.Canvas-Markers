@@ -81,7 +81,7 @@
 		},
 		
 		addLayers: function (layers) {
-			this.addMarkers(layers)
+			this.addMarkers(layers);
 		},
 		removeLayer: function (layer) {
 			this.removeMarker(layer,true);
@@ -127,12 +127,8 @@
 			map.on('moveend', this._reset, this);
 			map.on('resize',this._reset,this);
 			
-			//Only add Listeners if we are listening
-			if(this._onClickListeners.length>0)
-				map.on('click', this._executeListeners, this);
-			
-			if (this._onHoverListeners.length>0)
-				map.on('mousemove', this._executeListeners, this);
+			map.on('click', this._executeListeners, this);
+			map.on('mousemove', this._executeListeners, this);
         },
 
 		onRemove: function (map) {
@@ -150,6 +146,9 @@
 		_addMarker: function(marker,latlng,isDisplaying)
 		{
 			var self = this;
+			//Needed for pop-up & tooltip to work.
+			marker._map = self._map;
+			
 			//_markers contains Points of markers currently displaying on map
 			if (!self._markers) self._markers = new rbush();
 			
@@ -223,7 +222,7 @@
 																			 ];
 					i.onload = function()
 					{
-						self._imageLookup[marker.options.icon.options.iconUrl][1] = true
+						self._imageLookup[marker.options.icon.options.iconUrl][1] = true;
 						self._imageLookup[marker.options.icon.options.iconUrl][2].forEach(function (e)
 						{
 							self._drawImage(e[0],e[1]);
@@ -274,7 +273,7 @@
 				{
 					tmp.push(e);
 				});
-				self._latlngMarkers.clear()
+				self._latlngMarkers.clear();
 				self._latlngMarkers.load(tmp);
 				self._latlngMarkers.dirty=0;
 				tmp = [];
@@ -330,35 +329,47 @@
 		},
 
 		addOnClickListener: function (listener) {
-			if(this._onClickListeners.length===0)
-				map.on('click', this._executeListeners, this);
 			this._onClickListeners.push(listener);
 		},
 
 		addOnHoverListener: function (listener) {
-			if (this._onHoverListeners.length===0)
-				map.on('mousemove', this._executeListeners, this);
 			this._onHoverListeners.push(listener);
 		},
 
 		_executeListeners: function (event) {
-			if (this._onClickListeners.length <= 0 && this._onHoverListeners.length <= 0)
-				return;
-			else if (event.type==="click" && this._onClickListeners.length<=0)
-				return;
-			else if (event.type==="mousemove" && this._onHoverListeners.length<=0)
-				return;
 			var me = this;
 			var x = event.containerPoint.x;
 			var y = event.containerPoint.y;
+			
+			if(me._openToolTip)
+				{
+					me._openToolTip.closeTooltip();
+					delete me._openToolTip;
+				}
+				
 			var ret = this._markers.search({ minX: x, minY: y, maxX: x, maxY: y });
 
 			if (ret && ret.length > 0) {
 				me._map._container.style.cursor="pointer";
 				if (event.type==="click")
+				{
+					var pop = ret[0].data.getPopup();
+					if(pop)
+					{
+						ret[0].data.openPopup();
+					}
 					me._onClickListeners.forEach(function (listener) { listener(event, ret); });
+				}
 				if (event.type==="mousemove")
+				{						
+					var tool = ret[0].data.getTooltip()
+					if(tool)
+					{
+						me._openToolTip = ret[0].data;
+						ret[0].data.openTooltip();
+					}
 					me._onHoverListeners.forEach(function (listener) { listener(event, ret); });
+				}
 			}
 			else
 			{
