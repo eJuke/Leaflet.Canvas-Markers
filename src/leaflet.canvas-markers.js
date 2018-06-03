@@ -342,10 +342,10 @@
 			var y = event.containerPoint.y;
 			
 			if(me._openToolTip)
-				{
-					me._openToolTip.closeTooltip();
-					delete me._openToolTip;
-				}
+			{
+				me._openToolTip.closeTooltip();
+				delete me._openToolTip;
+			}
 				
 			var ret = this._markers.search({ minX: x, minY: y, maxX: x, maxY: y });
 
@@ -362,7 +362,7 @@
 				}
 				if (event.type==="mousemove")
 				{						
-					var tool = ret[0].data.getTooltip()
+					var tool = ret[0].data.getTooltip();
 					if(tool)
 					{
 						me._openToolTip = ret[0].data;
