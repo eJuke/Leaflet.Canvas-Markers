@@ -43,7 +43,8 @@
 
     var ciLayer = L.canvasIconLayer({}).addTo(map);
 
-    ciLayer.addOnClickListener((event) => console.log('clicked!'));
+    ciLayer.addOnClickListener(function (e,data) {ciLayer.removeLayer(data[0])});
+    ciLayer.addOnHoverListener(function (e,data) {console.log(data[0].data._leaflet_id)});
 
     var icon = L.icon({
       iconUrl: 'img/pothole.png',
@@ -53,7 +54,7 @@
 
 	var markers = [];
     for (var i = 0; i < 10000; i++) {
-      var marker = L.marker([58.5578 + Math.random()*1.8, 29.0087 + Math.random()*3.6], {icon: icon,testIndex: i});
+      var marker = L.marker([58.5578 + Math.random()*1.8, 29.0087 + Math.random()*3.6], {icon: icon});
 	  markers.push(marker);
     }
 	ciLayer.addLayers(markers);
