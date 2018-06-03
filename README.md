@@ -75,5 +75,4 @@ I also implemented binds for default **addLayer**, **addLayers** and **removeLay
 
 ## Contributors
 
-[crzo](https://github.com/crzo)
-[Spaction](https://github.com/Spaction)
+[crzo](https://github.com/crzo), [Spaction](https://github.com/Spaction)
