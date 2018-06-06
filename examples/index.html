@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Test</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>
   <style>
     body{
       font-family: Arial, Helvetica, sans-serif;
@@ -32,6 +32,7 @@
     </div>
     <div class="map" id="map"></div>
   </div>
+  <script src="https://unpkg.com/rbush@2.0.2/rbush.min.js"></script>
   <script src="../src/leaflet.canvas-markers.js"></script>
   <script>
     var map = L.map('map').setView([59.9578,30.2987], 10);
@@ -42,7 +43,8 @@
 
     var ciLayer = L.canvasIconLayer({}).addTo(map);
 
-    ciLayer.addOnClickListener((event) => console.log('clicked!'));
+    ciLayer.addOnClickListener(function (e,data) {console.log(data)});
+    ciLayer.addOnHoverListener(function (e,data) {console.log(data[0].data._leaflet_id)});
 
     var icon = L.icon({
       iconUrl: 'img/pothole.png',
@@ -50,12 +52,12 @@
       iconAnchor: [10, 9]
     });
 
-    var markers = [];
+	var markers = [];
     for (var i = 0; i < 10000; i++) {
-      var marker = L.marker([58.5578 + Math.random()*1.8, 29.0087 + Math.random()*3.6], {icon: icon});
-      markers.push(marker);
-      ciLayer.addLayer(markers[markers.length-1]);
+      var marker = L.marker([58.5578 + Math.random()*1.8, 29.0087 + Math.random()*3.6], {icon: icon}).bindPopup("I Am "+i);
+	  markers.push(marker);
     }
+	ciLayer.addLayers(markers);
   </script>
 </body>
 </html>
