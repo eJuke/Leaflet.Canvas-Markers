@@ -1,6 +1,6 @@
 {
   "name": "leaflet-canvas-marker",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Leaflet plugin to display icons on canvas instead of DOM",
   "main": "dist/leaflet.canvas-icons.js",
   "directories": {
@@ -15,7 +15,9 @@
   },
   "keywords": [
     "leaflet",
-    "leaflet-plugin"
+    "leaflet-plugin",
+    "marker",
+    "map"
   ],
   "author": "Evgeniy Voynov <voynov.ev@gmail.com> (http://github.com/eJuke)",
   "license": "MIT",
