@@ -11,9 +11,6 @@ function layerFactory(L) {
 
         setOptions: function (options) {
             L.setOptions(this, options);
-            if (this._canvas) {
-                this._updateOptions();
-            }
             return this.redraw();
         },
 
@@ -308,10 +305,6 @@ function layerFactory(L) {
 
             var animated = this._map.options.zoomAnimation && L.Browser.any3d;
             L.DomUtil.addClass(this._canvas, 'leaflet-zoom-' + (animated ? 'animated' : 'hide'));
-        },
-
-        _updateOptions: function () {
-
         },
 
         addOnClickListener: function (listener) {
