@@ -51,12 +51,12 @@
       iconAnchor: [10, 9]
     });
 
-	var markers = [];
+  var markers = [];
     for (var i = 0; i < 10000; i++) {
       var marker = L.marker([58.5578 + Math.random()*1.8, 29.0087 + Math.random()*3.6], {icon: icon}).bindPopup("I Am "+i);
-	  markers.push(marker);
+    markers.push(marker);
     }
-	ciLayer.addLayers(markers);
+  ciLayer.addLayers(markers);
   </script>
 </body>
 </html>
