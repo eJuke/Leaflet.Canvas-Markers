@@ -135,6 +135,12 @@ function layerFactory(L) {
 
             if (this.options.pane) this.getPane().removeChild(this._canvas);
             else map.getPanes().overlayPane.removeChild(this._canvas);
+
+            map.off('click', this._executeListeners, this);
+            map.off('mousemove', this._executeListeners, this);
+
+            map.off('moveend', this._reset, this);
+            map.off('resize',this._reset,this);
         },
 
         addTo: function (map) {
@@ -271,7 +277,7 @@ function layerFactory(L) {
 
             var self = this;
 
-            if (!this._map) return;
+            if (!this._map || !this._latlngMarkers) return;
             if (clear) this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
 
             var tmp = [];
@@ -355,6 +361,8 @@ function layerFactory(L) {
         },
 
         _executeListeners: function (event) {
+
+            if (!this._markers) return;
 
             var me = this;
             var x = event.containerPoint.x;
