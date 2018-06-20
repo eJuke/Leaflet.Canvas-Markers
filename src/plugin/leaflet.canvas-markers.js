@@ -149,6 +149,13 @@ function layerFactory(L) {
             return this;
         },
 
+        clearLayers: function() {
+
+            this._latlngMarkers = null;
+            this._markers = null;
+            this._redraw(true);
+        },
+
         _addMarker: function(marker,latlng,isDisplaying) {
 
             var self = this;
@@ -277,8 +284,8 @@ function layerFactory(L) {
 
             var self = this;
 
-            if (!this._map || !this._latlngMarkers) return;
             if (clear) this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+            if (!this._map || !this._latlngMarkers) return;
 
             var tmp = [];
 
