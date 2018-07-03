@@ -129,6 +129,9 @@ function layerFactory(L) {
 
             map.on('click', this._executeListeners, this);
             map.on('mousemove', this._executeListeners, this);
+
+            map.on('zoomstart', this._hide, this);
+            map.on('zoomend', this._show, this);
         },
 
         onRemove: function (map) {
@@ -141,6 +144,9 @@ function layerFactory(L) {
 
             map.off('moveend', this._reset, this);
             map.off('resize',this._reset,this);
+
+            map.off('zoomstart', this._hide, this);
+            map.off('zoomend',this._show,this);
         },
 
         addTo: function (map) {
@@ -156,6 +162,13 @@ function layerFactory(L) {
             this._redraw(true);
         },
 
+        _hide: function () {
+            this._canvas.style.display = "none";
+        },
+
+        _show: function () {
+            this._canvas.style.display = "block";
+        },
         _addMarker: function(marker,latlng,isDisplaying) {
 
             var self = this;
@@ -178,12 +191,12 @@ function layerFactory(L) {
             var iconSize = marker.options.icon.options.iconSize;
 
             var adj_x = iconSize[0]/2;
-            var adj_y = iconSize[1]/2;
+            var adj_y = iconSize[1];
             var ret = [({
                 minX: (pointPos.x - adj_x),
                 minY: (pointPos.y - adj_y),
                 maxX: (pointPos.x + adj_x),
-                maxY: (pointPos.y + adj_y),
+                maxY: (pointPos.y),
                 data: marker
             }),({
                 minX: latlng.lng,
@@ -197,7 +210,7 @@ function layerFactory(L) {
             self._latlngMarkers.total++;
 
             //Only draw if we are on map
-            if(isDisplaying===true) self._drawMarker(marker, pointPos);
+            self._drawMarker(marker, pointPos);
 
             return ret;
         },
@@ -293,9 +306,10 @@ function layerFactory(L) {
             if (self._latlngMarkers.dirty/self._latlngMarkers.total >= .1) {
 
                 self._latlngMarkers.all().forEach(function(e) {
-
                     tmp.push(e);
                 });
+
+
 
                 self._latlngMarkers.clear();
                 self._latlngMarkers.load(tmp);
@@ -309,26 +323,33 @@ function layerFactory(L) {
 
             var mapBoxCoords = {
 
-                minX: mapBounds.getWest(),
-                minY: mapBounds.getSouth(),
-                maxX: mapBounds.getEast(),
-                maxY: mapBounds.getNorth(),
+                minX: mapBounds.getWest() - 64,
+                minY: mapBounds.getSouth() - 64,
+                maxX: mapBounds.getEast() + 64,
+                maxY: mapBounds.getNorth() + 64,
             };
 
-            self._latlngMarkers.search(mapBoxCoords).forEach(function (e) {
+
+            var foundMarkers = self._latlngMarkers.search(mapBoxCoords);
+
+            foundMarkers.sort(function (a, b) {
+                return b.minY - a.minY;
+            });
+
+            foundMarkers.forEach(function (e) {
 
                 //Readjust Point Map
                 var pointPos = self._map.latLngToContainerPoint(e.data.getLatLng());
 
                 var iconSize = e.data.options.icon.options.iconSize;
                 var adj_x = iconSize[0]/2;
-                var adj_y = iconSize[1]/2;
+                var adj_y = iconSize[1];
 
                 var newCoords = {
                     minX: (pointPos.x - adj_x),
                     minY: (pointPos.y - adj_y),
                     maxX: (pointPos.x + adj_x),
-                    maxY: (pointPos.y + adj_y),
+                    maxY: (pointPos.y),
                     data: e.data
                 }
 
@@ -391,6 +412,8 @@ function layerFactory(L) {
 
                     var hasPopup = ret[0].data.getPopup();
                     if(hasPopup) ret[0].data.openPopup();
+
+                    ret[0].data.fire("click");
 
                     me._onClickListeners.forEach(function (listener) { listener(event, ret); });
                 }
