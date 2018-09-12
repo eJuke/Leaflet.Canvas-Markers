@@ -362,8 +362,6 @@ function layerFactory(L) {
         _initCanvas: function () {
 
             this._canvas = L.DomUtil.create('canvas', 'leaflet-canvas-icon-layer leaflet-layer');
-            var originProp = L.DomUtil.testProp(['transformOrigin', 'WebkitTransformOrigin', 'msTransformOrigin']);
-            this._canvas.style[originProp] = '50% 50%';
 
             var size = this._map.getSize();
             this._canvas.width = size.x;
