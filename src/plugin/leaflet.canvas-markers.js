@@ -148,7 +148,7 @@ function layerFactory(L) {
 
 
             if (map._zoomAnimated) {
-                map.of('zoomanim', this._animateZoom, this);
+                map.off('zoomanim', this._animateZoom, this);
             }
         },
 
@@ -273,14 +273,23 @@ function layerFactory(L) {
         _drawImage: function (marker, pointPos) {
 
             var options = marker.options.icon.options;
+            this._context.save();
+
+            var degrees = options.rotationAngle || 0;
+            var x = pointPos.x - options.iconAnchor[0];
+            var y = pointPos.y - options.iconAnchor[1];
+
+            this._context.translate(x, y);
+            this._context.rotate(degrees * Math.PI/180);
 
             this._context.drawImage(
                 marker.canvas_img,
-                pointPos.x - options.iconAnchor[0],
-                pointPos.y - options.iconAnchor[1],
+                options.iconSize[0] / -2,
+                options.iconSize[1] / -2,
                 options.iconSize[0],
                 options.iconSize[1]
             );
+            this._context.restore();
         },
 
         _reset: function () {
