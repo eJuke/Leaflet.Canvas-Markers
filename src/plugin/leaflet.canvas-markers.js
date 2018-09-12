@@ -129,6 +129,10 @@ function layerFactory(L) {
 
             map.on('click', this._executeListeners, this);
             map.on('mousemove', this._executeListeners, this);
+
+            if (map._zoomAnimated) {
+                map.on('zoomanim', this._animateZoom, this);
+            }
         },
 
         onRemove: function (map) {
@@ -141,6 +145,11 @@ function layerFactory(L) {
 
             map.off('moveend', this._reset, this);
             map.off('resize',this._reset,this);
+
+
+            if (map._zoomAnimated) {
+                map.of('zoomanim', this._animateZoom, this);
+            }
         },
 
         addTo: function (map) {
@@ -154,6 +163,13 @@ function layerFactory(L) {
             this._latlngMarkers = null;
             this._markers = null;
             this._redraw(true);
+        },
+
+        _animateZoom: function(event) {
+            var scale = this._map.getZoomScale(event.zoom);
+            var offset = this._map._latLngBoundsToNewLayerBounds(this._map.getBounds(), event.zoom, event.center).min;
+
+            L.DomUtil.setTransform(this._canvas, offset, scale);
         },
 
         _addMarker: function(marker,latlng,isDisplaying) {
