@@ -10,12 +10,23 @@ function layerFactory(L) {
             L.setOptions(this, options);
             this._onClickListeners = [];
             this._onHoverListeners = [];
+            this._rawMarkers = [];
         },
 
         setOptions: function (options) {
 
             L.setOptions(this, options);
             return this.redraw();
+        },
+
+        getBounds: function () {
+            var bounds = new L.LatLngBounds();
+
+            this._rawMarkers.forEach(marker => {
+                bounds.extend(marker.getLatLng());
+            });
+
+            return bounds;
         },
 
         redraw: function () {
@@ -38,6 +49,7 @@ function layerFactory(L) {
                     return;
                 }
 
+                self._rawMarkers.push(marker);
                 var latlng = marker.getLatLng();
                 var isDisplaying = self._map.getBounds().contains(latlng);
                 var s = self._addMarker(marker,latlng,isDisplaying);
@@ -56,6 +68,7 @@ function layerFactory(L) {
         addMarker: function (marker) {
 
             var self = this;
+            self._rawMarkers.push(marker);
             var latlng = marker.getLatLng();
             var isDisplaying = self._map.getBounds().contains(latlng);
             var dat = self._addMarker(marker,latlng,isDisplaying);
@@ -129,6 +142,10 @@ function layerFactory(L) {
 
             map.on('click', this._executeListeners, this);
             map.on('mousemove', this._executeListeners, this);
+
+            if (map._zoomAnimated) {
+                map.on('zoomanim', this._animateZoom, this);
+            }
         },
 
         onRemove: function (map) {
@@ -141,6 +158,11 @@ function layerFactory(L) {
 
             map.off('moveend', this._reset, this);
             map.off('resize',this._reset,this);
+
+
+            if (map._zoomAnimated) {
+                map.off('zoomanim', this._animateZoom, this);
+            }
         },
 
         addTo: function (map) {
@@ -153,7 +175,15 @@ function layerFactory(L) {
 
             this._latlngMarkers = null;
             this._markers = null;
+            this._rawMarkers = [];
             this._redraw(true);
+        },
+
+        _animateZoom: function(event) {
+            var scale = this._map.getZoomScale(event.zoom);
+            var offset = this._map._latLngBoundsToNewLayerBounds(this._map.getBounds(), event.zoom, event.center).min;
+
+            L.DomUtil.setTransform(this._canvas, offset, scale);
         },
 
         _addMarker: function(marker,latlng,isDisplaying) {
@@ -257,14 +287,23 @@ function layerFactory(L) {
         _drawImage: function (marker, pointPos) {
 
             var options = marker.options.icon.options;
+            this._context.save();
+
+            var degrees = options.rotationAngle || 0;
+            var x = pointPos.x - options.iconAnchor[0];
+            var y = pointPos.y - options.iconAnchor[1];
+
+            this._context.translate(x, y);
+            this._context.rotate(degrees * Math.PI/180);
 
             this._context.drawImage(
                 marker.canvas_img,
-                pointPos.x - options.iconAnchor[0],
-                pointPos.y - options.iconAnchor[1],
+                options.iconSize[0] / -2,
+                options.iconSize[1] / -2,
                 options.iconSize[0],
                 options.iconSize[1]
             );
+            this._context.restore();
         },
 
         _reset: function () {
@@ -346,8 +385,6 @@ function layerFactory(L) {
         _initCanvas: function () {
 
             this._canvas = L.DomUtil.create('canvas', 'leaflet-canvas-icon-layer leaflet-layer');
-            var originProp = L.DomUtil.testProp(['transformOrigin', 'WebkitTransformOrigin', 'msTransformOrigin']);
-            this._canvas.style[originProp] = '50% 50%';
 
             var size = this._map.getSize();
             this._canvas.width = size.x;
