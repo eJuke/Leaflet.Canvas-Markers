@@ -10,12 +10,23 @@ function layerFactory(L) {
             L.setOptions(this, options);
             this._onClickListeners = [];
             this._onHoverListeners = [];
+            this._rawMarkers = [];
         },
 
         setOptions: function (options) {
 
             L.setOptions(this, options);
             return this.redraw();
+        },
+
+        getBounds: function () {
+            var bounds = new L.LatLngBounds();
+
+            this._rawMarkers.forEach(marker => {
+                bounds.extend(marker.getLatLng());
+            });
+
+            return bounds;
         },
 
         redraw: function () {
@@ -38,6 +49,7 @@ function layerFactory(L) {
                     return;
                 }
 
+                self._rawMarkers.push(marker);
                 var latlng = marker.getLatLng();
                 var isDisplaying = self._map.getBounds().contains(latlng);
                 var s = self._addMarker(marker,latlng,isDisplaying);
@@ -56,6 +68,7 @@ function layerFactory(L) {
         addMarker: function (marker) {
 
             var self = this;
+            self._rawMarkers.push(marker);
             var latlng = marker.getLatLng();
             var isDisplaying = self._map.getBounds().contains(latlng);
             var dat = self._addMarker(marker,latlng,isDisplaying);
@@ -162,6 +175,7 @@ function layerFactory(L) {
 
             this._latlngMarkers = null;
             this._markers = null;
+            this._rawMarkers = [];
             this._redraw(true);
         },
 
