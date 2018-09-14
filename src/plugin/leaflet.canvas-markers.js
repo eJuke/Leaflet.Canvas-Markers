@@ -148,7 +148,7 @@ function layerFactory(L) {
 
 
             if (map._zoomAnimated) {
-                map.of('zoomanim', this._animateZoom, this);
+                map.off('zoomanim', this._animateZoom, this);
             }
         },
 
