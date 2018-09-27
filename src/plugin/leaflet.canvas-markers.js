@@ -129,6 +129,8 @@ function layerFactory(L) {
 
             map.on('click', this._executeListeners, this);
             map.on('mousemove', this._executeListeners, this);
+            map.on('contextmenu', this._executeListeners, this);
+            
         },
 
         onRemove: function (map) {
@@ -138,6 +140,7 @@ function layerFactory(L) {
 
             map.off('click', this._executeListeners, this);
             map.off('mousemove', this._executeListeners, this);
+            map.off('contextmenu', this._executeListeners, this);
 
             map.off('moveend', this._reset, this);
             map.off('resize',this._reset,this);
@@ -387,6 +390,13 @@ function layerFactory(L) {
 
                 me._map._container.style.cursor="pointer";
 
+                if (event.type === "contextmenu") {
+
+                    if (ret[0].data.options.contextmenuItems.length > 0) {
+                        ret[0].data._showContextMenu(event);
+                    }
+                }
+                
                 if (event.type==="click") {
 
                     var hasPopup = ret[0].data.getPopup();
