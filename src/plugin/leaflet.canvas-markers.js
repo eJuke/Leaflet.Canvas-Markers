@@ -392,7 +392,9 @@ function layerFactory(L) {
 
                 if (event.type === "contextmenu") {
 
-                    ret[0].data._showContextMenu(event);
+                    if (ret[0].data.options.contextmenuItems.length > 0) {
+                        ret[0].data._showContextMenu(event);
+                    }
                 }
                 
                 if (event.type==="click") {
